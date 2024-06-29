@@ -132,11 +132,13 @@ function move() {
 
     if (nextCell.id === game.food?.id) {
         nextCell.stuffed = true
-        game.food = null
+        game.food = createFoodCell(random(game.metadata.cols-1), random(game.metadata.rows-1))
     }
 
     let tail = game.snake
-    if (!tail[tail.length-1].stuffed) {
+    if (tail[tail.length-1].stuffed) {
+        tail[tail.length-1].stuffed = false
+    } else {
         tail = tail.slice(0, -1)
     }
 
@@ -146,8 +148,8 @@ function move() {
 function createGame(): Game {
     const game: Game = {
         metadata: {
-            rows: 20,
-            cols: 20,
+            rows: 15,
+            cols: 15,
             collision: false,
         },
         snake: [
@@ -157,7 +159,7 @@ function createGame(): Game {
             createSnakeCell(2,3),
             createSnakeCell(2,2),
         ],
-        food: createFoodCell(10, 10),
+        food: createFoodCell(2, 8),
         direction: Direction.right,
     }
 
@@ -185,4 +187,8 @@ function createFoodCell(x: number, y: number): FoodCell {
         y,
         type: 'food'
     }
+}
+
+function random(max: number): number {
+    return Math.floor(Math.random() * (max + 1))
 }
